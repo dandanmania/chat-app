@@ -5,7 +5,7 @@ import Svg, { Defs, Path, G, Use } from "react-native-svg";
 export default class Start extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {name: '', bgColor: ''};
+        this.state = {name: '', bgColor: '', sysColor: ''};
     }
 
     colors = {
@@ -13,6 +13,11 @@ export default class Start extends React.Component {
         color2: '#474056',
         color3: '#8A95A5',
         color4: '#B9C6AE'
+    }
+
+    sysColors = {
+        color1: '#d7d7d7',
+        color2: '#272727'
     }
 
     render() {
@@ -46,15 +51,15 @@ export default class Start extends React.Component {
                         <View style={styles.colorSelector}>
                             <Text style={styles.colorText}>Choose Background Color:</Text>
                             <View style={styles.colorsContainer}>
-                                <TouchableOpacity style={styles.color1} onPress={() => this.setState({bgColor: this.colors.color1})}></TouchableOpacity>
-                                <TouchableOpacity style={styles.color2} onPress={() => this.setState({bgColor: this.colors.color2})}></TouchableOpacity>
-                                <TouchableOpacity style={styles.color3} onPress={() => this.setState({bgColor: this.colors.color3})}></TouchableOpacity>
-                                <TouchableOpacity style={styles.color4} onPress={() => this.setState({bgColor: this.colors.color4})}></TouchableOpacity>
+                                <TouchableOpacity style={styles.color1} onPress={() => this.setState({bgColor: this.colors.color1, sysColor: this.sysColors.color1})}></TouchableOpacity>
+                                <TouchableOpacity style={styles.color2} onPress={() => this.setState({bgColor: this.colors.color2, sysColor: this.sysColors.color1})}></TouchableOpacity>
+                                <TouchableOpacity style={styles.color3} onPress={() => this.setState({bgColor: this.colors.color3, sysColor: this.sysColors.color2})}></TouchableOpacity>
+                                <TouchableOpacity style={styles.color4} onPress={() => this.setState({bgColor: this.colors.color4, sysColor: this.sysColors.color2})}></TouchableOpacity>
                             </View>
                         </View>
                         <Pressable
                             style={styles.chatButton}
-                            onPress={() => this.props.navigation.navigate('Chat', { name: this.state.name, bgColor: this.state.bgColor })}
+                            onPress={() => this.props.navigation.navigate('Chat', { name: this.state.name, bgColor: this.state.bgColor, sysColor: this.state.sysColor })}
                             >
                             <Text style={{color: 'white'}}>Start Chatting</Text>
                         </Pressable>
