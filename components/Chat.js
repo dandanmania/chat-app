@@ -1,6 +1,8 @@
 import React from "react";
-import { Text, View, Platform, Keyboard, KeyboardAvoidingView, TouchableWithoutFeedback } from "react-native";
-import { GiftedChat, Bubble, Day, SystemMessage } from 'react-native-gifted-chat';
+import { View, Platform, Keyboard, KeyboardAvoidingView, TouchableWithoutFeedback, StatusBar } from "react-native";
+import { GiftedChat, Bubble, Day, SystemMessage, InputToolbar } from 'react-native-gifted-chat';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import NetInfo from '@react-native-community/netinfo';
 
 const firebase = require('firebase');
 require('firebase/firestore');
@@ -14,6 +16,7 @@ export default class Chat extends React.Component {
             user: {
                 _id: '',
                 name: '',
+                isConnected: 'false'
             }
         }
 
@@ -33,10 +36,36 @@ export default class Chat extends React.Component {
         this.referenceMessageList = firebase.firestore().collection('messages');
     }
 
+    // getMessages function
+    async getMessages() {
+        let messages = '';
+        try {
+            messages = await AsyncStorage.getItem('messages') || [];
+            this.setState({
+                messages: JSON.parse(messages)
+            });
+        } catch(error) {
+            console.log(error.message);
+        }
+    };
+
     componentDidMount() {
+        // Check online connection
+        NetInfo.fetch().then((connection) => {
+            if (connection.isConnected) {
+                console.log('online');
+                this.setState({isConnected: true})
+            } else {
+                console.log('offline');
+            }
+        });
+
         // Set topbar to display name from Start Screen
         let name = this.props.route.params.name;
         this.props.navigation.setOptions({ title: name });
+
+        //  Get messaages from async Storage
+        this.getMessages();
 
         // Anonymous Authentication
         this.referenceMessageList = firebase.firestore().collection('messages');
@@ -53,6 +82,9 @@ export default class Chat extends React.Component {
                     name: name,
                 }
             })
+
+            // Save Messages upon Firebase Connecting
+            this.saveMessages();
 
             this.unsubscribe = this.referenceMessageList
                 .orderBy('createdAt', 'desc')
@@ -98,12 +130,32 @@ export default class Chat extends React.Component {
         })
     }
 
+    async saveMessages() {
+        try {
+            await AsyncStorage.setItem('messages', JSON.stringify(this.state.messages));
+        } catch(error) {
+            console.log(error.message);
+        }
+    }
+
+    async deleteMessages() {
+        try {
+            await AsyncStorage.removeItem('messages');
+            this.setState({
+                messages: []
+            })
+        } catch(error) {
+            console.log(error.message);
+        }
+    }
+
     onSend(messages = []) {
         this.setState(previousState => ({
             messages: GiftedChat.append(previousState.messages, messages),
         }),
             () => {
                 this.addMessage(this.state.messages[0])
+                this.saveMessages();
             }
         )
     }
@@ -141,15 +193,30 @@ export default class Chat extends React.Component {
         )
     }
 
+    renderInputToolbar(props) {
+        if (this.state.isConnected == false) {
+        } else {
+            return(
+                <InputToolbar
+                {...props}
+                />
+            )
+        }
+    }
+
     render() {
         let { bgColor, name } = this.props.route.params;
         return (
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                <View style={{flex: 1, backgroundColor: bgColor}}>
+                <View style={{flex: 1, backgroundColor: bgColor, ...Platform.select({ios: {marginBottom: 40}})}}>
+                    <StatusBar barStyle='dark-content'/>
                     <GiftedChat 
+                        wrapInSafeArea={false}
+                        bottomOffset={40}
                         renderBubble={this.renderBubble.bind(this)}
                         renderDay={this.renderDay.bind(this)}
                         renderSystemMessage={this.renderSystemMessage.bind(this)}
+                        renderInputToolbar={this.renderInputToolbar.bind(this)}
                         messages = {this.state.messages}
                         onSend={(messages) => this.onSend(messages)}
                         user={{
