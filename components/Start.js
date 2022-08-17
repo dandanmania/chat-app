@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, TextInput, ImageBackground, Pressable, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, ImageBackground, Pressable, TouchableOpacity, StatusBar ,StyleSheet } from 'react-native';
 import Svg, { Defs, Path, G, Use } from "react-native-svg";
 
 export default class Start extends React.Component {
@@ -23,6 +23,7 @@ export default class Start extends React.Component {
     render() {
         return (
             <View style={styles.container}>
+                { Platform.OS === 'android' ? <StatusBar barStyle='light-content'/> : <StatusBar barStyle='dark-content' /> }
                 <ImageBackground source={require('../assets/BackgroundImage.png')} resizeMode='cover' style={styles.background}>
                     <Text style={styles.title}>Chat App</Text>
                     <View style={styles.box}>

@@ -16,8 +16,8 @@ export default class Chat extends React.Component {
             user: {
                 _id: '',
                 name: '',
-                isConnected: 'false'
-            }
+            },
+            isConnected: false
         }
 
         const firebaseConfig = {
@@ -36,6 +36,58 @@ export default class Chat extends React.Component {
         this.referenceMessageList = firebase.firestore().collection('messages');
     }
 
+    componentDidMount() {
+        // Check online connection
+        NetInfo.fetch().then((connection) => {
+            if (connection.isConnected) {
+                console.log('online');
+                this.setState({isConnected: true})
+                this.referenceMessageList = firebase.firestore().collection('messages');
+            
+                
+                // Anonymous Authentication
+                this.authUnsubscribe = firebase.auth().onAuthStateChanged((user) => {
+                    if (!user) {
+                        firebase.auth().signInAnonymously();
+                    }
+        
+                    this.setState({
+                        uid: user.uid,
+                        messages: [],
+                        user: {
+                            _id: user.uid,
+                            name: name,
+                        }
+                    })
+    
+                    this.unsubscribe = this.referenceMessageList
+                    .orderBy('createdAt', 'desc')
+                    .onSnapshot(this.onCollectionUpdate);
+
+                    // Save User State after sign in (for Offline)
+                    this.saveUser();
+                })
+            } else {
+                console.log('offline');
+                // Get User and Messages Offline
+                this.getUser();
+                this.getMessages();
+            }
+        });
+
+        // Set topbar to display name from Start Screen
+        let name = this.props.route.params.name;
+        this.props.navigation.setOptions({ title: name });
+    }
+
+    // Stop listening for changes
+    componentWillUnmount() {
+        if(this.state.isConnected) {
+            this.authUnsubscribe();
+            this.unsubscribe();
+        }
+    }
+
     // getMessages function
     async getMessages() {
         let messages = '';
@@ -48,54 +100,6 @@ export default class Chat extends React.Component {
             console.log(error.message);
         }
     };
-
-    componentDidMount() {
-        // Check online connection
-        NetInfo.fetch().then((connection) => {
-            if (connection.isConnected) {
-                console.log('online');
-                this.setState({isConnected: true})
-            } else {
-                console.log('offline');
-            }
-        });
-
-        // Set topbar to display name from Start Screen
-        let name = this.props.route.params.name;
-        this.props.navigation.setOptions({ title: name });
-
-        //  Get messaages from async Storage
-        this.getMessages();
-
-        // Anonymous Authentication
-        this.referenceMessageList = firebase.firestore().collection('messages');
-        this.authUnsubscribe = firebase.auth().onAuthStateChanged((user) => {
-            if (!user) {
-                firebase.auth().signInAnonymously();
-            }
-
-            this.setState({
-                uid: user.uid,
-                messages: [],
-                user: {
-                    _id: user.uid,
-                    name: name,
-                }
-            })
-
-            // Save Messages upon Firebase Connecting
-            this.saveMessages();
-
-            this.unsubscribe = this.referenceMessageList
-                .orderBy('createdAt', 'desc')
-                .onSnapshot(this.onCollectionUpdate);
-        })
-    }
-
-    // Stop listening for changes
-    componentWillUnmount() {
-        this.authUnsubscribe();
-    }
 
     onCollectionUpdate = (querySnapshot) => {
         const messages = [];
@@ -136,6 +140,29 @@ export default class Chat extends React.Component {
         } catch(error) {
             console.log(error.message);
         }
+    }
+
+    // Save User (for Offline)
+    async saveUser() {
+        try {
+            await AsyncStorage.setItem('user', JSON.stringify(this.state.user));
+        } catch(error) {
+            console.log(error.message);
+        }
+    }
+
+    // Get User (for Offline)
+    async getUser() {
+        let user = { _id: '', name: '' };
+        try {
+            user = await AsyncStorage.getItem('user') || { _id: '', name: '' };
+            this.setState({
+                user: JSON.parse(user)
+            })
+        } catch(error) {
+            console.log(error.message);
+        }
+
     }
 
     async deleteMessages() {
@@ -209,7 +236,7 @@ export default class Chat extends React.Component {
         return (
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <View style={{flex: 1, backgroundColor: bgColor, ...Platform.select({ios: {marginBottom: 40}})}}>
-                    <StatusBar barStyle='dark-content'/>
+                    { Platform.OS === 'android' ? <StatusBar barStyle='light-content'/> : <StatusBar barStyle='dark-content' /> }
                     <GiftedChat 
                         wrapInSafeArea={false}
                         bottomOffset={40}
