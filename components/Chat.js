@@ -1,8 +1,11 @@
 import React from "react";
 import { View, Platform, Keyboard, KeyboardAvoidingView, TouchableWithoutFeedback, StatusBar } from "react-native";
 import { GiftedChat, Bubble, Day, SystemMessage, InputToolbar } from 'react-native-gifted-chat';
+import ConnectedCustomActions from './CustomActions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NetInfo from '@react-native-community/netinfo';
+import MapView from "react-native-maps";
+import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 
 const firebase = require('firebase');
 require('firebase/firestore');
@@ -17,6 +20,8 @@ export default class Chat extends React.Component {
                 _id: '',
                 name: '',
             },
+            image: null,
+            location: null,
             isConnected: false
         }
 
@@ -115,6 +120,8 @@ export default class Chat extends React.Component {
                     _id: data.user._id,
                     name: data.user.name
                 },
+                image: data.image,
+                location: data.location
             });
         });
         this.setState({
@@ -128,9 +135,11 @@ export default class Chat extends React.Component {
         this.referenceMessageList.add({
             uid: this.state.uid,
             _id: message._id,
-            text: message.text,
+            text: message.text || '',
             createdAt: message.createdAt,
             user: message.user,
+            image: message.image || null,
+            location: message.location || null,
         })
     }
 
@@ -231,10 +240,39 @@ export default class Chat extends React.Component {
         }
     }
 
+    renderCustomActions = (props) => {
+        return <ConnectedCustomActions {...props} />;
+    }
+
+    renderCustomView = (props) => {
+        const { currentMessage } = props;
+        if (currentMessage.location) {
+            return (
+                <MapView 
+                    style={{ width: 150, height: 100, borderRadius: 13, margin: 3}}
+                    region={{
+                        latitude: currentMessage.location.latitude,
+                        longitude: currentMessage.location.longitude,
+                        latitudeDelta: 0.0922,
+                        longitudeDelta: 0.0421,
+                    }}
+                />
+            )
+        }
+        return null;
+    }
+
     render() {
         let { bgColor, name } = this.props.route.params;
         return (
-            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <ActionSheetProvider>
+            <TouchableWithoutFeedback
+                onPress={Keyboard.dismiss}
+                accessible={true}
+                accessibilityLabel='More Options'
+                accessibilityHint='Choose an Image, Take a Photo, or Send Your geolocation'
+                accessibilityRole='button'
+                >
                 <View style={{flex: 1, backgroundColor: bgColor, ...Platform.select({ios: {marginBottom: 40}})}}>
                     { Platform.OS === 'android' ? <StatusBar barStyle='light-content'/> : <StatusBar barStyle='dark-content' /> }
                     <GiftedChat 
@@ -244,6 +282,8 @@ export default class Chat extends React.Component {
                         renderDay={this.renderDay.bind(this)}
                         renderSystemMessage={this.renderSystemMessage.bind(this)}
                         renderInputToolbar={this.renderInputToolbar.bind(this)}
+                        renderActions={this.renderCustomActions}
+                        renderCustomView={this.renderCustomView.bind(this)}
                         messages = {this.state.messages}
                         onSend={(messages) => this.onSend(messages)}
                         user={{
@@ -254,6 +294,7 @@ export default class Chat extends React.Component {
                     { Platform.OS === 'android' ? <KeyboardAvoidingView behavior="height" /> : null }
                 </View>
             </TouchableWithoutFeedback>
+            </ActionSheetProvider>
         )
     }
 }
