@@ -1,11 +1,11 @@
 import React from "react";
-import { View, Text, TextInput, ImageBackground, Pressable, TouchableOpacity, StatusBar ,StyleSheet } from 'react-native';
+import { View, Text, TextInput, ImageBackground, Pressable, TouchableOpacity, TouchableWithoutFeedback, StatusBar ,StyleSheet, Keyboard } from 'react-native';
 import Svg, { Defs, Path, G, Use } from "react-native-svg";
 
 export default class Start extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {name: '', bgColor: '', sysColor: ''};
+        this.state = {name: '', bgColor: '#f5f5dc', sysColor: '#272727'};
     }
 
     colors = {
@@ -22,6 +22,7 @@ export default class Start extends React.Component {
 
     render() {
         return (
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={styles.container}>
                 { Platform.OS === 'android' ? <StatusBar barStyle='light-content'/> : <StatusBar barStyle='dark-content' /> }
                 <ImageBackground source={require('../assets/BackgroundImage.png')} resizeMode='cover' style={styles.background}>
@@ -67,6 +68,7 @@ export default class Start extends React.Component {
                     </View>
                 </ImageBackground>
             </View>
+            </TouchableWithoutFeedback>
         )
     }
 }
