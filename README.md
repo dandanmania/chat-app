@@ -40,7 +40,7 @@ This project is from [CareerFoundry's Full Stack Web Development Program](https:
 5. Install [GiftedChat](https://github.com/FaridSafi/react-native-gifted-chat)
    `npm install react-native-gifted-chat` or `yarn add react-native-gifted-chat`
 
-6. Install react-navigation, react-native-svg, asyncStorage, NetInfo, Permissions, ImagePicker, Location, react-native-maps
+6. Install react-navigation, react-native-svg, asyncStorage, NetInfo, Permissions, ImagePicker, Location, react-native-maps <br>
    `npm install @react-navigation/native @react-navigation/stack` <br>
    `expo install react-native-reanimated react-native-gesture-handler react-native-screens react-native-safe-area-context @react-native-community/masked-view react-native-svg @react-native-async-storage/async-storage @react-native-community/netinfo expo-permissions expo-image-picker expo-locations react-native-maps` <br>
 
