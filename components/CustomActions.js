@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, View, Text, StyleSheet, ActionSheetIOS } from 'react-native';
+import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
 import { connectActionSheet } from '@expo/react-native-action-sheet';
 import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
@@ -116,7 +116,14 @@ class CustomActions extends React.Component {
         
     render() {
         return(
-            <TouchableOpacity style={[styles.container]} onPress={this.onActionPress}>
+            <TouchableOpacity
+                style={[styles.container]}
+                onPress={this.onActionPress}
+                accessible={true}
+                accessibilityLabel='More Options'
+                accessibilityHint='Choose an Image, Take a Photo, or Send Your geolocation'
+                accessibilityRole='button'
+                >
                 <View style={[styles.wrapper, this.props.wrapperStyle]}>
                     <Text style={[styles.iconText, this.props.iconTextStyle]}>+</Text>
                 </View>
