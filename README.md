@@ -11,7 +11,7 @@ This project is from [CareerFoundry's Full Stack Web Development Program](https:
 
 ## Set Up Development Environment
 
-1. Install [Expo CLI](https://docs.expo.dev/workflow/expo-cli/)
+1. Install [Expo CLI](https://docs.expo.dev/workflow/expo-cli/) <br>
    `npm install expo-cli`
 
 2. Insall [Android Studio](https://developer.android.com/studio)
@@ -37,14 +37,14 @@ This project is from [CareerFoundry's Full Stack Web Development Program](https:
    - Go through the setup process with the respective, compatible OS.
    - When the device is set up, click the play button to start the emulator.
 
-5. Install [GiftedChat](https://github.com/FaridSafi/react-native-gifted-chat)
+5. Install [GiftedChat](https://github.com/FaridSafi/react-native-gifted-chat) <br>
    `npm install react-native-gifted-chat` or `yarn add react-native-gifted-chat`
 
 6. Install react-navigation, react-native-svg, asyncStorage, NetInfo, Permissions, ImagePicker, Location, react-native-maps <br>
    `npm install @react-navigation/native @react-navigation/stack` <br>
    `expo install react-native-reanimated react-native-gesture-handler react-native-screens react-native-safe-area-context @react-native-community/masked-view react-native-svg @react-native-async-storage/async-storage @react-native-community/netinfo expo-permissions expo-image-picker expo-locations react-native-maps` <br>
 
-7. Install Cloud Firestore and Firebase
+7. Install Cloud Firestore and Firebase <br>
    `npm install firebase`
 
 8. Connect Firebase
