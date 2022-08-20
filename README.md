@@ -9,7 +9,7 @@ This project is from [CareerFoundry's Full Stack Web Development Program](https:
 - GiftedChat
 - Google Firestore Database
 
-## Set Up Development Environment
+## Set Up After Clone/Download
 
 1. Install [Expo CLI](https://docs.expo.dev/workflow/expo-cli/) <br>
    `npm install expo-cli`
