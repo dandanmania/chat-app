@@ -23,6 +23,7 @@ This project is from [CareerFoundry's Full Stack Web Development Program](https:
    - Open Android Studio
    - In welcome screen, click **More Options**, select **SDK Manager**, and make sure "Android SDK Build-Tools" is installed. Be sure to install "Android Emulator Hypervisor Driver for AMD processors (installer)" or "Intel x86 Emulator Accelerator (HAXM installer)" depending on your device's CPU (AMD and Intel respectively)
    - For MacOS, Add Android SDK Location to your "~/.bash_profile", "~/.bashrc", or "/.zshrc" depending on if you're using bash or zsh terminal.
+     <br>
 
    ```
    export ANDROID_SDK=/Users/[system user name here]/Library/Android/sdk
@@ -40,8 +41,8 @@ This project is from [CareerFoundry's Full Stack Web Development Program](https:
    `npm install react-native-gifted-chat` or `yarn add react-native-gifted-chat`
 
 6. Install react-navigation, react-native-svg, asyncStorage, NetInfo, Permissions, ImagePicker, Location, react-native-maps
-   `npm install @react-navigation/native @react-navigation/stack`
-   `expo install react-native-reanimated react-native-gesture-handler react-native-screens react-native-safe-area-context @react-native-community/masked-view react-native-svg @react-native-async-storage/async-storage @react-native-community/netinfo expo-permissions expo-image-picker expo-locations react-native-maps`
+   `npm install @react-navigation/native @react-navigation/stack` <br>
+   `expo install react-native-reanimated react-native-gesture-handler react-native-screens react-native-safe-area-context @react-native-community/masked-view react-native-svg @react-native-async-storage/async-storage @react-native-community/netinfo expo-permissions expo-image-picker expo-locations react-native-maps` <br>
 
 7. Install Cloud Firestore and Firebase
    `npm install firebase`
