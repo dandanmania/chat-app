@@ -44,7 +44,7 @@ This project is from [CareerFoundry's Full Stack Web Development Program](https:
    `npm install @react-navigation/native @react-navigation/stack` <br>
 
    ```
-   expo install react-native-reanimated react-native-gesture-handler react-native-screens react-native-safe-area-context @react-native-community/masked-view react-native-svg @react-native-async-storage/async-storage @react-native-community/netinfo expo-permissions expo-image-picker expo-locations react-native-maps
+   expo install react-native-reanimated react-native-gesture-handler react-native-screens react-native-safe-area-context @react-native-community/masked-view react-native-svg @react-native-async-storage/async-storage @react-native-community/netinfo expo-image-picker expo-location react-native-maps
    ```
 
     <br>
@@ -53,10 +53,15 @@ This project is from [CareerFoundry's Full Stack Web Development Program](https:
    `npm install firebase`
 
 8. Connect [Firebase](https://firebase.google.com/)
+
    - Under your Firebase's Project Settings > General, scroll down until you find "Your Apps" and copy and use
+
    ```
    const firebaseConfig = {
        [Your Config]
    };
    ```
+
    - Replace the firebaseConfig in Chat.js Lines 28-35
+
+9. Run `expo start` to start up the app!
