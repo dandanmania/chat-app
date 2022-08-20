@@ -52,7 +52,7 @@ This project is from [CareerFoundry's Full Stack Web Development Program](https:
 7. Install Cloud Firestore and Firebase <br>
    `npm install firebase`
 
-8. Connect Firebase
+8. Connect [Firebase](https://firebase.google.com/)
    - Under your Firebase's Project Settings > General, scroll down until you find "Your Apps" and copy and use
    ```
    const firebaseConfig = {
