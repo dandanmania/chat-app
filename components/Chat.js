@@ -266,13 +266,7 @@ export default class Chat extends React.Component {
         let { bgColor, name } = this.props.route.params;
         return (
             <ActionSheetProvider>
-            <TouchableWithoutFeedback
-                onPress={Keyboard.dismiss}
-                accessible={true}
-                accessibilityLabel='More Options'
-                accessibilityHint='Choose an Image, Take a Photo, or Send Your geolocation'
-                accessibilityRole='button'
-                >
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <View style={{flex: 1, backgroundColor: bgColor, ...Platform.select({ios: {marginBottom: 40}})}}>
                     { Platform.OS === 'android' ? <StatusBar barStyle='light-content'/> : <StatusBar barStyle='dark-content' /> }
                     <GiftedChat 
