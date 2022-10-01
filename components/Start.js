@@ -26,7 +26,7 @@ export default class Start extends React.Component {
             <View style={styles.container}>
                 { Platform.OS === 'android' ? <StatusBar barStyle='light-content'/> : <StatusBar barStyle='dark-content' /> }
                 <ImageBackground source={require('../assets/BackgroundImage.png')} resizeMode='cover' style={styles.background}>
-                    <Text style={styles.title}>Chat App</Text>
+                    <Text style={styles.title}>Chit Chat</Text>
                     <View style={styles.box}>
                         <View style={styles.inputContainer}>
                             <View style={styles.svgContainer}>
